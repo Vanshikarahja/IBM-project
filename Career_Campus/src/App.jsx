@@ -1,6 +1,10 @@
-// This is for component-level or app-level custom styles.
-// You can write custom CSS classes here and use them in your components.
 
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Landing from './pages/Landing'
+import SignUp from './pages/SignUp'
+import SignIn frrom './pages/SignIn'
+import Form from './pages/Form'
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
