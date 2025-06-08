@@ -3,8 +3,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
 import SignUp from './pages/SignUp'
-import SignIn frrom './pages/SignIn'
+import SignIn from './pages/SignIn'
 import Form from './pages/Form'
+import Game from './pages/Game'
+import Chat from './pages/Chat'
+
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -14,9 +17,22 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-blue-500">hello guys</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/form" element={<Form />} />
+        <Route path="/game" element={<Game />} />
+        <Route path="/chat" element={<Chat />} />
+      </Routes>   
+      </BrowserRouter>
+
+
+    // <div>
+    //   <h1 className="text-4xl font-bold text-blue-500">hello guys</h1>
+    // </div>
     
   )
 }
