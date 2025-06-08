@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* This is for global styles and for Tailwind’s @tailwind directives.
+We usually don’t write custom CSS here unless you want it to apply everywhere. */
