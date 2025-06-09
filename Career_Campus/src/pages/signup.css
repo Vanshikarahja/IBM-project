@@ -1,0 +1,70 @@
+.signin-container {
+  min-height: 100vh;
+  padding: 40px 20px; /* space from top and bottom */
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.signin-card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.signin-card h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.signin-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signin-card input,
+.signin-card select {
+  padding: 12px 15px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.signin-card input:focus,
+.signin-card select:focus {
+  outline: none;
+  border-color: #6a11cb;
+}
+
+.signin-btn {
+  margin-top: 15px;
+  padding: 12px 0;
+  background: #6a11cb;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.signin-btn:hover {
+  background: #2575fc;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  text-align: left;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
