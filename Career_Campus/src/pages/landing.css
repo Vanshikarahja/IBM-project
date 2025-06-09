@@ -1,0 +1,40 @@
+.landing-container {
+  background-color: #1e2d4f; 
+  min-height: 100vh;
+  color: white;
+  font-family: 'Georgia', serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #3c2a1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: #f5deb3;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  color: #f5deb3; /* wheat / brass */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.compass-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+}
