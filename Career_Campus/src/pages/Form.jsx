@@ -1,78 +1,37 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
+import { askGenAi } from '../utils/genai'
 
 const Form = () => {
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        about: "",
-    });
-    const [submitted, setSubmitted] = useState(false);
+  const [query, setQuery] = useState("")
+  const [response, setResponse] = useState("")
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const result = await askGenAi(query)
+    setResponse(result)
+  }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setSubmitted(true);
-        // Here you can send form data to a backend if needed
-    };
+  return (
+    <div className="p-6">
+      <form onSubmit={handleSubmit}>
+        <textarea
+          placeholder="Tell us about your interests..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full p-2 border"
+        />
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 mt-2">
+          Get Career Path
+        </button>
+      </form>
+      {response && (
+        <div className="mt-4 bg-gray-100 p-4 rounded">
+          <h3 className="font-bold text-lg">GenAI Suggestion:</h3>
+          <p>{response}</p>
+        </div>
+      )}
+    </div>
+  )
+}
 
-    if (submitted) {
-        return (
-            <div className="max-w-md mx-auto mt-10 p-6 bg-green-100 rounded shadow">
-                <h2 className="text-2xl font-bold mb-4">Thank you for your response!</h2>
-                <p>We have received your information.</p>
-            </div>
-        );
-    }
-
-    return (
-        <form
-            onSubmit={handleSubmit}
-            className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow"
-        >
-            <h2 className="text-2xl font-bold mb-4">Tell us about yourself</h2>
-            <div className="mb-4">
-                <label className="block mb-1 font-medium">Name</label>
-                <input
-                    className="w-full border px-3 py-2 rounded"
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block mb-1 font-medium">Email</label>
-                <input
-                    className="w-full border px-3 py-2 rounded"
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block mb-1 font-medium">About Yourself</label>
-                <textarea
-                    className="w-full border px-3 py-2 rounded"
-                    name="about"
-                    value={form.about}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-                Submit
-            </button>
-        </form>
-    );
-};
-
-export default Form;
+export default Form

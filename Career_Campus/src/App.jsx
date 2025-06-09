@@ -7,7 +7,7 @@ import SignIn from './pages/SignIn'
 import Form from './pages/Form'
 import Game from './pages/Game'
 import Chat from './pages/Chat'
-
+import {askGenAi} from './utils/genai'
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
