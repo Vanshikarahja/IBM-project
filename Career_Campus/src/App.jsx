@@ -10,12 +10,15 @@ import Game from './pages/Game'
 import Chat from './pages/Chat'
 
 import { useState } from 'react'
+<<<<<<< HEAD
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 
 
 
 
+=======
+>>>>>>> 0ef17c3 (WIP: Save progress before rebase)
 import './App.css'
 import './index.css'
 function App() {
@@ -31,12 +34,18 @@ function App() {
         <Route path="/Form" element={<Form />} />
         <Route path="/Game" element={<Game />} />
         <Route path="/Chat" element={<Chat />} />
+<<<<<<< HEAD
        
         
       </Routes>   
       </BrowserRouter>
 
 
+=======
+
+        </Routes>   
+      </BrowserRouter>
+>>>>>>> 0ef17c3 (WIP: Save progress before rebase)
     
   )
 }
