@@ -1,30 +1,55 @@
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const marqueeText = " Empowering individuals to discover their ideal career paths through cutting-edge professional guidance tools ";
 
 const ScrollingText = () => {
+  const containerRef = useRef(null);
   const textRef = useRef(null);
 
   useEffect(() => {
-    // Infinite horizontal loop
-    gsap.to(textRef.current, {
-      xPercent: -100,
-      repeat: -1,
-      duration: 8,
-      ease: "linear",
+    const container = containerRef.current;
+    const text = textRef.current;
+    const [first, second] = container.children;
+
+    // Get the width of the text for dynamic duration
+    const textWidth = text.offsetWidth;
+    const containerWidth = container.offsetWidth;
+    const distance = textWidth;
+
+    // Set the second span to start right after the first
+    gsap.set(second, { x: distance });
+
+    const duration = distance / 100; // Adjust denominator for speed (higher = slower)
+
+    const tl = gsap.timeline({ repeat: -1, defaults: { ease: "linear" } });
+    tl.to([first, second], {
+      x: `-=${distance}`,
+      duration: duration,
+      onComplete: () => {
+        gsap.set([first, second], { x: 0 });
+      }
     });
+
+    return () => tl.kill();
   }, []);
 
   return (
-    <div className="overflow-hidden w-full bg-black py-4">
+    <div className="overflow-hidden w-full bg-black py-6">
       <div
-        ref={textRef}
-        className="whitespace-nowrap text-2xl font-bold text-white"
-        style={{ willChange: "transform", display: "inline-block" }}
+        ref={containerRef}
+        className="flex whitespace-nowrap"
+        style={{ willChange: "transform" }}
       >
-        {" Let's connect with the most advanced tools for profession suggestion. ".repeat(2)}
+        <span
+          ref={textRef}
+          className="text-3xl md:text-5xl font-bold text-white px-8 font-montserrat"
+        >
+          {marqueeText}
+        </span>
+        <span className="text-3xl md:text-5xl font-bold text-white px-8 font-montserra">
+          {marqueeText}
+        </span>
       </div>
     </div>
   );
