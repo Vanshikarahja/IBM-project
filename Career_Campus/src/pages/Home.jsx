@@ -1,14 +1,17 @@
 import { Canvas } from '@react-three/fiber';
+import React, { useRef, useEffect } from "react";
 import gsap from 'gsap';
 import "../style.css"
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Bloom,ToneMapping,EffectComposer } from '@react-three/postprocessing';
 import Cyl from "../components/Cyl.jsx";
 import ScrollingText from '../components/ScrollingText.jsx';
+//import Slider from "../components/Slider.jsx";
 // import Navbar from '../components/Navbar.jsx';
 const Home = () => {
   // 10-28 line added
  gsap.registerPlugin(ScrollTrigger);
+  const nextSectionRef = useRef(null);
   useEffect(() => {
     if (nextSectionRef.current) {
       gsap.fromTo(
@@ -31,7 +34,7 @@ const Home = () => {
     {/* <Navbar/> */}
        <Canvas flat camera={{fov:22}}>
         {/* <OrbitControls />  */}
-       < ambientLight/>
+       <ambientLight />
        <Cyl/>
        <EffectComposer>
       <Bloom
@@ -49,15 +52,10 @@ const Home = () => {
 
       {/* scrolling text */}
      <ScrollingText />
-     <div
-        ref={nextSectionRef}
-        className="w-full bg-black py-32 opacity-0 transition-opacity"
-      >
-        <h1 className="text-white text-4xl text-center">Career Campus</h1>
-      </div>
-     
 
      {/* now there will be cards */}
+     {/* <Slider/> */}
+     
 
      
       </>

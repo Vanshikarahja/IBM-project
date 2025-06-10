@@ -1,14 +1,21 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa:wght@300..700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pacifico&family=Roboto+Slab&display=swap');
+
 body , html, #root{
     width: 100%;
     height: 100%;
     margin:0;
     padding:0;
-}
-#root{
-     /* min-height: 100vh; */
-    min-width: 100vw;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* position:fixed; */
     background-color: black;
+ font-family: 'Montserrat', 'Kanit', 'Comfortaa', 'Bebas Neue', 'Pacifico', 'Roboto Slab', sans-serif;
+}
+
+#root{
+     min-height: 100vh;
+    min-width: 100vw;
+    
+    /* background-color: black; */
+}
+#root > * {
+    width: 100%;
 }
