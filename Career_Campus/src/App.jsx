@@ -24,15 +24,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        {/* <Route path="/" element={<Landing />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/Form" element={<Form />} />
         <Route path="/Game" element={<Game />} />
-        <Route path="/Chat" element={<Chat />} />
+        <Route path="/Chat" element={<Chat />} /> */}
         
-
+<Route path="/" element={<Home />} />
 
         
       </Routes>   

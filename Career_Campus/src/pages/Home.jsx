@@ -12,7 +12,7 @@ import Cyl from "../components/Cyl.jsx";
 import ScrollingText from "../components/ScrollingText.jsx";
 import Slider from "../components/Slider.jsx";
 import Footer from "../components/Footer.jsx";
-import About from "../components/About.jsx";
+//import About from "../components/About.jsx";
 import Navbar from "../components/Navbar.jsx";
 const Home = () => {
   // 10-28 line added

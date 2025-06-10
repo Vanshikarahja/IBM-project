@@ -1,16 +1,16 @@
 import React from "react";
-import splash from "../splash.png";
+//import splash from "./splash.png";
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import UserForm from "../UserForm";
+import UserForm from "./UserForm";
 import ExploreFuture from "./ExploreFuture";
-import EngineerQuiz from "./chapters/EngineerQuiz";  
-import DoctorQuiz from "./chapters/DoctorQuiz";
+import EngineerQuiz from "../chapters/EngineerQuiz";  
+import DoctorQuiz from "../chapters/DoctorQuiz";
 
-import PilotQuiz from "./chapters/PilotQuiz";
-import TeacherQuiz from "./chapters/TeacherQuiz";
-import NavyQuiz from "./chapters/NavyQuiz";
-import LawyerQuiz from "./chapters/LawyerQuiz";
+import PilotQuiz from "../chapters/PilotQuiz";
+import TeacherQuiz from "../chapters/TeacherQuiz";
+import NavyQuiz from "../chapters/NavyQuiz";
+import LawyerQuiz from "../chapters/LawyerQuiz";
 export default function Game() {
     return(
         <BrowserRouter>
