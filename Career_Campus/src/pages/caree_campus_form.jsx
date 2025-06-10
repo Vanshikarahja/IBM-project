@@ -1,169 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 
-const LOGO_SRC = "/logo.jpg"; // Corrected logo path
-
-const Header = () => {
-  return (
-    <header
-      role="banner"
-      style={{
-        position: "sticky",
-        top: 0,
-        width: "100%",
-        
-        backgroundColor: "rgb(20,7,7)",
-        boxShadow: "0 1px 4px rgba(20, 7, 7, 0.1)",
-        zIndex: 1000,
-      }}
-    >
-      <nav
-        aria-label="Primary navigation"
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          padding: "0.75rem 1.5rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-          <img
-            src={LOGO_SRC}
-            alt="Company Logo"
-            style={{
-              height: 70 ,
-              width: "auto",
-              userSelect: "none",
-              transition: "transform 0.25s ease-in-out",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            draggable={false}
-          />
-          <span
-            style={{
-              marginLeft: 12,
-              fontWeight: 700,
-              fontSize: "1.75rem",
-              color: "#ffffff",
-              userSelect: "none",
-              fontFamily: "'Inter', sans-serif",
-            }}
-          >
-            CAREER CAMPUS
-          </span>
-        </div>
-      </nav>
-    </header>
-  );
-};
-
-const CareerGuidanceForm = () => {
+const CareerForm = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    dob: "",
-    gender: "",
-    email: "",
-    phone: "",
-    currentClass: "",
-    schoolName: "",
-    subjectsStudied: [],
-    preferredStream: "",
-    hobbies: "",
+    fullName: '',
+    ageOrDob: '',
+    educationLevel: '',
+    stream: '',
+    academicScore: '',
+    favoriteSubjects: [],
+    hobbies: '',
+    skills: '',
+    dreamCareer: '',
+    openToSuggestions: 'true',
   });
 
-  const [focusedField, setFocusedField] = useState(null);
-  const [hoverSubmit, setHoverSubmit] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [recommendations, setRecommendations] = useState(null);
+  const [careerReport, setCareerReport] = useState(null);
+  const reportRef = useRef(null);
 
-  // Constants for options
-  const SUBJECT_OPTIONS = [
-    "Mathematics",
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "Computer Science",
-    "Economics",
-    "History",
-    "Geography",
-    "Literature",
-    "Political Science",
+  const educationLevels = [
+    'Class 10',
+    'Class 11',
+    'Class 12',
+    'Undergraduate',
+    'Graduate',
+    'Other',
   ];
-
-  const STREAM_OPTIONS = [
-    { value: "", label: "-- Select Stream --" },
-    { value: "science", label: "Science" },
-    { value: "commerce", label: "Commerce" },
-    { value: "arts", label: "Arts" },
-    { value: "vocational", label: "Vocational" },
+  const streams = ['Science', 'Commerce', 'Arts', 'Other'];
+  const favoriteSubjectsOptions = [
+    'Math',
+    'Science',
+    'English',
+    'History',
+    'Computer Science',
+    'Art',
+    'Economics',
   ];
-
-  const GENDER_OPTIONS = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "other", label: "Other" },
+  const dreamCareersOptions = [
+    'Engineer',
+    'Doctor',
+    'IAS Officer',
+    'Data Scientist',
+    'Not Sure',
   ];
-
-  // Career data for recommendations
-  const CAREER_DATA = {
-    science: {
-      career: "Engineer, Scientist, Doctor, Data Analyst",
-      benefits:
-        "High demand, strong salary potential, and opportunities for innovation and impact.",
-      salary: "Average starting salary $60,000 - $90,000 per year.",
-      education:
-        "Bachelor's degree in engineering, medicine, computer science or related fields.",
-    },
-    commerce: {
-      career:
-        "Accountant, Financial Analyst, Marketing Manager, Entrepreneur",
-      benefits:
-        "Diverse career paths, strong business networks, and growth potential in corporate sectors.",
-      salary: "Average starting salary $50,000 - $80,000 per year.",
-      education:
-        "Degrees or diplomas in commerce, business administration, finance, or marketing.",
-    },
-    arts: {
-      career: "Graphic Designer, Writer, Teacher, Social Worker",
-      benefits:
-        "Creative freedom, community impact, and flexible career options.",
-      salary: "Average starting salary $35,000 - $60,000 per year.",
-      education:
-        "Courses in fine arts, humanities, social sciences, education, or communication.",
-    },
-    vocational: {
-      career: "Electrician, Mechanic, Chef, Healthcare Assistant",
-      benefits:
-        "Hands-on skills, short training periods, and steady job demand.",
-      salary: "Average starting salary $30,000 - $50,000 per year.",
-      education:
-        "Vocational training, apprenticeships, or certificate courses relevant to the field.",
-    },
-    default: {
-      career:
-        "Various career options depending on your interests and skills.",
-      benefits:
-        "Explore widely to find the best fit for your unique talents and passions.",
-      salary: "Varies widely based on career path.",
-      education:
-        "Consider broadly relevant courses or certifications to enhance employability.",
-    },
-  };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (name === "subjectsStudied") {
-      let newSubjects = [...formData.subjectsStudied];
-      if (checked) {
-        if (!newSubjects.includes(value)) newSubjects.push(value);
-      } else {
-        newSubjects = newSubjects.filter((subj) => subj !== value);
-      }
-      setFormData((prev) => ({ ...prev, subjectsStudied: newSubjects }));
+    const { name, value } = e.target;
+    if (name === 'favoriteSubjects') {
+      setFormData((prev) => ({
+        ...prev,
+        favoriteSubjects: Array.from(
+          e.target.selectedOptions,
+          (option) => option.value
+        ),
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -172,460 +61,726 @@ const CareerGuidanceForm = () => {
     }
   };
 
-  const generateRecommendations = (data) => {
-    const streamKey = data.preferredStream || "default";
-    const baseCareer = CAREER_DATA[streamKey] || CAREER_DATA.default;
-
-    let hobbyMsg = "";
-    if (
-      data.hobbies.toLowerCase().includes("tech") ||
-      data.hobbies.toLowerCase().includes("coding")
-    ) {
-      hobbyMsg =
-        "Your interest in technology is a strong asset, consider adding coding and data analysis skills.";
-    } else if (
-      data.hobbies.toLowerCase().includes("art") ||
-      data.hobbies.toLowerCase().includes("design")
-    ) {
-      hobbyMsg =
-        "Creative hobbies can flourish in design, media, or advertising careers.";
-    }
-
-    let subjectsMsg = "";
-    if (
-      data.subjectsStudied.includes("Mathematics") &&
-      data.subjectsStudied.includes("Physics")
-    ) {
-      subjectsMsg =
-        "Strong math and physics background is great for engineering, data science, or finance.";
-    } else if (
-      data.subjectsStudied.includes("Economics") ||
-      data.subjectsStudied.includes("Commerce")
-    ) {
-      subjectsMsg =
-        "Commerce subjects open doors to finance, business, and management fields.";
+  const generateCareerReport = (data) => {
+    const dreamCareerLower = data.dreamCareer.toLowerCase();
+    const primaryCareers = [];
+    const alternativeCareers = [];
+    let whyCareer = '';
+    switch (dreamCareerLower) {
+      case 'engineer':
+        primaryCareers.push('Software Engineer', 'Civil Engineer');
+        alternativeCareers.push('Data Scientist', 'Systems Analyst');
+        whyCareer = 'Strong analytical and technical skills, interest in Math and Science.';
+        break;
+      case 'doctor':
+        primaryCareers.push('Doctor', 'Surgeon');
+        alternativeCareers.push('Nurse', 'Medical Researcher');
+        whyCareer = 'Passion for biology, caring for others, and science knowledge.';
+        break;
+      case 'ias officer':
+        primaryCareers.push('IAS Officer', 'Civil Services');
+        alternativeCareers.push('Policy Analyst', 'Public Administrator');
+        whyCareer = 'Strong leadership, decision making and societal impact interests.';
+        break;
+      default:
+        primaryCareers.push('Software Engineer', 'Data Scientist');
+        alternativeCareers.push('UX Designer', 'Digital Marketer');
+        whyCareer = 'Versatile skills and growing technology industry.';
     }
 
     return {
-      careerPaths: baseCareer.career,
-      benefits: baseCareer.benefits,
-      salary: baseCareer.salary,
-      education: baseCareer.education,
-      additionalNotes: [hobbyMsg, subjectsMsg].filter(Boolean),
+      careerOptions: {
+        primary: primaryCareers,
+        alternative: alternativeCareers,
+        why: whyCareer,
+      },
+      educationPath: {
+        courses: ['B.Tech in Computer Science', 'B.Sc in related fields'],
+        exams: ['JEE Main', 'JEE Advanced'],
+        institutes: ['NITs', 'IIITs', 'IITs'],
+        certifications: ['Python Certification', 'AWS Certification'],
+      },
+      careerDescription: {
+        overview:
+          'Software engineers design, develop and maintain software systems using programming languages.',
+        responsibilities: [
+          'Write code',
+          'Test software',
+          'Collaborate with teams',
+          'Debug and improve software',
+        ],
+        environment: 'Office or remote, collaborative team environment',
+      },
+      salaryInsights: {
+        entryLevelIndia: '₹3-6 LPA',
+        entryLevelGlobal: '$50,000–$80,000',
+        midLevel: '₹8-15 LPA / $90,000',
+        highEnd: '₹20+ LPA / $120,000+',
+      },
+      requiredSkills: {
+        hardSkills: ['Programming', 'Algorithms', 'Data Structures'],
+        softSkills: ['Communication', 'Problem Solving', 'Teamwork'],
+        development: 'Online courses, coding bootcamps, internships, projects',
+      },
+      benefits: {
+        jobSecurity: 'High',
+        growth: 'Fast',
+        workLifeBalance: 'Good',
+        impact: 'Moderate to High',
+      },
+      futureScope: {
+        demand: 'Growing',
+        technologies: ['AI', 'Cloud Computing', 'Blockchain'],
+        opportunities: 'Remote jobs and global opportunities',
+      },
+      backupOptions:
+        'Consider Data Analyst or QA Tester roles for less pressure or simpler paths.',
+      actionPlan: {
+        shortTerm: [
+          'Learn programming basics',
+          'Prepare for entrance exams',
+          'Join relevant courses',
+        ],
+        midTerm: ['Internship', 'Build portfolio', 'Advanced courses'],
+        longTerm: ['Master’s degree', 'Switch role if desired'],
+      },
+      inspirationalQuote:
+        '"Choose a job you love, and you will never have to work a day in your life." – Confucius',
     };
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const recs = generateRecommendations(formData);
-    setRecommendations(recs);
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    if (!formData.fullName.trim()) {
+      alert('Please enter your full name.');
+      return;
+    }
+    if (!formData.educationLevel) {
+      alert('Please select your current education level.');
+      return;
+    }
+    if (
+      (formData.educationLevel === 'Class 11' || formData.educationLevel === 'Class 12') &&
+      !formData.stream
+    ) {
+      alert('Please select your stream/subjects.');
+      return;
+    }
+
+    const generatedReport = generateCareerReport(formData);
+    setCareerReport(generatedReport);
   };
 
-  // Styles adhering to Default Design Guidelines
-  const styles = {
-    container: {
-      backgroundColor: "#ffffff",
-      maxWidth: 900,
-      margin: "48px auto 80px",
-      padding: "48px 56px 64px",
-      borderRadius: "0.75rem",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-      fontFamily: "'Inter', sans-serif",
-      color: "#374151",
-      lineHeight: 1.6,
-      boxSizing: "border-box",
-    },
-    welcomeMessage: {
-      fontWeight: 600,
-      fontSize: 28,
-      marginBottom: 12,
-      color: "#6B7280",
-      textAlign: "center",
-      letterSpacing: "1.5px",
-      userSelect: "none",
-    },
-    heading: {
-      fontWeight: 800,
-      fontSize: 48,
-      marginBottom: 36,
-      color: "#111827",
-      textAlign: "center",
-      userSelect: "none",
-    },
-    label: {
-      display: "block",
-      fontWeight: 600,
-      fontSize: 16,
-      marginBottom: 8,
-      marginTop: 24,
-      color: "#6B7280",
-    },
-    input: {
-      width: "100%",
-      padding: "12px 16px",
-      fontSize: 16,
-      borderRadius: 8,
-      border: "1px solid #D1D5DB",
-      boxSizing: "border-box",
-      transition: "border-color 0.3s ease",
-      fontFamily: "'Inter', sans-serif",
-      color: "#374151",
-    },
-    inputFocus: {
-      borderColor: "#2563EB",
-      outline: "none",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.4)",
-    },
-    textarea: {
-      width: "100%",
-      minHeight: 96,
-      padding: "12px 16px",
-      fontSize: 16,
-      borderRadius: 8,
-      border: "1px solid #D1D5DB",
-      resize: "vertical",
-      fontFamily: "'Inter', sans-serif",
-      color: "#374151",
-      transition: "border-color 0.3s ease",
-      boxSizing: "border-box",
-    },
-    fieldset: {
-      border: "none",
-      padding: 0,
-      marginTop: 20,
-      marginBottom: 0,
-    },
-    checkboxLabel: {
-      display: "inline-flex",
-      alignItems: "center",
-      marginRight: 18,
-      fontSize: 16,
-      color: "#4B5563",
-      cursor: "pointer",
-      userSelect: "none",
-    },
-    checkboxInput: {
-      marginRight: 6,
-      cursor: "pointer",
-      width: 18,
-      height: 18,
-    },
-    radioLabel: {
-      display: "inline-flex",
-      alignItems: "center",
-      marginRight: 24,
-      fontSize: 16,
-      color: "#4B5563",
-      cursor: "pointer",
-      userSelect: "none",
-    },
-    radioInput: {
-      marginRight: 6,
-      cursor: "pointer",
-      width: 18,
-      height: 18,
-    },
-    select: {
-      width: "100%",
-      padding: "12px 16px",
-      fontSize: 16,
-      borderRadius: 8,
-      border: "1px solid #D1D5DB",
-      fontFamily: "'Inter', sans-serif",
-      color: "#374151",
-      transition: "border-color 0.3s ease",
-      boxSizing: "border-box",
-    },
-    button: {
-      marginTop: 40,
-      padding: "14px 0",
-      backgroundColor: "#111827",
-      color: "#FFFFFF",
-      fontSize: 18,
-      fontWeight: 700,
-      border: "none",
-      borderRadius: 12,
-      cursor: "pointer",
-      width: "100%",
-      transition: "background-color 0.3s ease",
-      userSelect: "none",
-      boxShadow: "0 4px 12px rgba(17,24,39,0.3)",
-    },
-    buttonHover: {
-      backgroundColor: "#2563EB",
-      boxShadow: "0 6px 16px rgba(37,99,235,0.6)",
-    },
-    recommendationsSection: {
-      marginTop: 64,
-      paddingTop: 32,
-      borderTop: "1px solid #E5E7EB",
-      backgroundColor: "#f9fafb",
-      borderRadius: 12,
-      padding: 32,
-      fontFamily: "'Inter', sans-serif",
-      color: "#374151",
-      lineHeight: 1.6,
-      boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-    },
-    recHeading: {
-      fontWeight: 700,
-      fontSize: 28,
-      marginBottom: 16,
-      color: "#111827",
-      textAlign: "center",
-      userSelect: "none",
-    },
-    recItem: {
-      marginBottom: 24,
-    },
-    recTitle: {
-      fontWeight: 600,
-      fontSize: 20,
-      marginBottom: 6,
-      color: "#2563EB",
-      userSelect: "none",
-    },
-    recText: {
-      fontSize: 16,
-      color: "#374151",
-      lineHeight: 1.5,
-      userSelect: "text",
-    },
-    recList: {
-      listStyleType: "disc",
-      marginLeft: 20,
-      color: "#374151",
-    },
-  };
-
-  const renderTextInput = (label, name, type = "text", placeholder = "") => (
-    <>
-      <label htmlFor={name} style={styles.label}>
-        {label}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        value={formData[name]}
-        onChange={handleChange}
-        required
-        aria-required="true"
-        style={{
-          ...styles.input,
-          ...(focusedField === name ? styles.inputFocus : {}),
-        }}
-        onFocus={() => setFocusedField(name)}
-        onBlur={() => setFocusedField(null)}
-        autoComplete="off"
-      />
-    </>
-  );
+  useEffect(() => {
+    if (careerReport && reportRef.current) {
+      reportRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [careerReport]);
 
   return (
-    <main
-      id="form-container"
-      style={styles.container}
-      role="main"
-      aria-label="Career Guidance Registration Form"
-    >
-      <p style={styles.welcomeMessage}>WELCOME TO CAREER CAMPUS</p>
-      <h1 style={styles.heading}>Career Guidance Registration</h1>
-      <form onSubmit={handleSubmit} noValidate>
-        {renderTextInput("Full Name", "fullName", "text", "Enter your full name")}
-        {renderTextInput("Date of Birth", "dob", "date")}
-        {/* Gender Radios */}
-        <fieldset
-          style={styles.fieldset}
-          aria-describedby="gender-desc"
-          aria-required="true"
-        >
-          <legend style={{ ...styles.label, marginTop: 24 }}>Gender</legend>
-          <p
-            id="gender-desc"
-            style={{
-              marginTop: 0,
-              marginBottom: 8,
-              fontSize: 14,
-              color: "#6B7280",
-            }}
-          >
-            Select your gender
-          </p>
-          {GENDER_OPTIONS.map(({ value, label }) => (
-            <label
-              key={value}
-              htmlFor={`gender-${value}`}
-              style={styles.radioLabel}
-            >
-              <input
-                id={`gender-${value}`}
-                type="radio"
-                name="gender"
-                value={value}
-                checked={formData.gender === value}
-                onChange={handleChange}
-                style={styles.radioInput}
-                required
-              />
-              {label}
-            </label>
-          ))}
-        </fieldset>
-        {renderTextInput("Email", "email", "email", "Enter your email")}
-        {renderTextInput("Phone Number", "phone", "tel", "Enter your phone number")}
-        {renderTextInput(
-          "Current Class",
-          "currentClass",
-          "text",
-          "Enter your current class or grade"
-        )}
-        {renderTextInput("School Name", "schoolName", "text", "Enter your school name")}
-        {/* Subjects Studied Checkboxes */}
-        <fieldset
-          style={styles.fieldset}
-          aria-describedby="subjects-desc"
-          aria-required="true"
-        >
-          <legend style={{ ...styles.label, marginTop: 24 }}>Subjects Studied</legend>
-          <p
-            id="subjects-desc"
-            style={{
-              marginTop: 0,
-              marginBottom: 8,
-              fontSize: 14,
-              color: "#6B7280",
-            }}
-          >
-            Select all subjects you study
-          </p>
-          {SUBJECT_OPTIONS.map((subject) => (
-            <label
-              key={subject}
-              htmlFor={`subject-${subject}`}
-              style={styles.checkboxLabel}
-            >
-              <input
-                id={`subject-${subject}`}
-                type="checkbox"
-                name="subjectsStudied"
-                value={subject}
-                checked={formData.subjectsStudied.includes(subject)}
-                onChange={handleChange}
-                style={styles.checkboxInput}
-              />
-              {subject}
-            </label>
-          ))}
-        </fieldset>
-        {/* Preferred Stream Dropdown */}
-        <label htmlFor="preferredStream" style={styles.label}>
-          Preferred Stream
-        </label>
-        <select
-          id="preferredStream"
-          name="preferredStream"
-          value={formData.preferredStream}
-          onChange={handleChange}
-          required
-          aria-required="true"
-          style={{
-            ...styles.select,
-            ...(focusedField === "preferredStream" ? styles.inputFocus : {}),
-          }}
-          onFocus={() => setFocusedField("preferredStream")}
-          onBlur={() => setFocusedField(null)}
-        >
-          {STREAM_OPTIONS.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-        {/* Hobbies Textarea */}
-        <label htmlFor="hobbies" style={styles.label}>
-          Hobbies and Passions
-        </label>
-        <textarea
-          id="hobbies"
-          name="hobbies"
-          placeholder="Describe your hobbies, activities, or passions"
-          value={formData.hobbies}
-          onChange={handleChange}
-          required
-          aria-required="true"
-          rows={4}
-          style={{
-            ...styles.textarea,
-            ...(focusedField === "hobbies" ? styles.inputFocus : {}),
-          }}
-          onFocus={() => setFocusedField("hobbies")}
-          onBlur={() => setFocusedField(null)}
+    <>
+      <style>{`
+        * {
+          box-sizing: border-box;
+        }
+        body {
+          margin: 0;
+          background:rgb(84, 79, 79); /* white background as per guidelines */
+          color:rgb(82, 87, 99);
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+          line-height: 1.6;
+        }
+        header {
+          position: sticky;
+          top: 0;
+          background: #fff;
+          box-shadow: 0 2px 6px rgba(41, 30, 30, 0.06);
+          display: flex;
+          align-items: center;
+          padding: 1rem 2rem;
+          z-index: 1000;
+          gap: 1rem;
+        }
+        header img {
+          height: 48px;
+          width: auto;
+          user-select: none;
+        }
+        header h1 {
+          font-weight: 800;
+          font-size: 48px;
+          color:rgb(32, 37, 48);
+          margin: 0;
+          user-select: none;
+          white-space: nowrap;
+        }
+        .page-container {
+          max-width: 1200px;
+          margin: 3rem auto 6rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center; /* center form horizontally */
+          gap: 2.5rem;
+          padding: 0 1rem;
+        }
+        .form-description {
+          background:rgb(236, 238, 243);
+          border-radius: 0.75rem;
+          padding: 2rem 3rem;
+          color:rgb(64, 67, 79);
+          font-weight: 600;
+          font-size: 1.5rem;
+          box-shadow: 0 4px 12px rgb(30 58 138 / 0.1);
+          max-width: 780px;
+          width: 100%;
+        }
+        .form-description p {
+          font-weight: 400;
+          font-size: 1.125rem;
+          margin-top: 0.5rem;
+          color:rgb(44, 45, 48);
+          line-height: 1.5;
+        }
+        form {
+          background: #ffff
+          ;
+          border-radius: 0.75rem;
+          padding: 2rem 3rem;
+          box-shadow: 0 8px 24px rgb(0 0 0 / 0.05);
+          max-width: 780px;
+          width: 100%;
+          user-select: none;
+        }
+        h2.section-title {
+          font-size: 1.875rem;
+          font-weight: 700;
+          color:rgb(72, 92, 128);
+          margin-bottom: 1.25rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solidrgb(142, 153, 189);
+          user-select: none;
+        }
+        label {
+          display: block;
+          font-weight: 600;
+          color:rgb(93, 103, 118);
+          margin-bottom: 0.375rem;
+          margin-top: 1rem;
+          user-select: none;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+          width: 100%;
+          padding: 0.625rem 0.75rem;
+          font-size: 1rem;
+          border-radius: 0.75rem;
+          border: 1px solidrgb(57, 58, 60);
+          background: #f9fafb;
+          transition: border-color 0.2s ease;
+          color:rgb(29, 36, 49);
+          user-select: text;
+          font-weight: 500;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+          outline: none;
+          border-color:rgb(112, 108, 179);
+          box-shadow: 0 0 0 3px rgb(79 70 229 / 0.25);
+          background: white;
+        }
+        textarea {
+          resize: vertical;
+          min-height: 72px;
+        }
+        select[multiple] {
+          height: auto;
+          min-height: 110px;
+          cursor: pointer;
+          padding: 0.375rem 0.75rem;
+        }
+        select[multiple] option {
+          padding: 0.35rem 0.5rem;
+        }
+        button.submit-btn {
+          background: linear-gradient(90deg,rgb(111, 109, 155) 0%, #4338ca 100%);
+          color: white;
+          border: none;
+          padding: 1rem 1.5rem;
+          font-size: 1.125rem;
+          font-weight: 700;
+          border-radius: 0.75rem;
+          cursor: pointer;
+          margin-top: 2.5rem;
+          width: 100%;
+          transition: background-color 0.3s ease, box-shadow 0.3s ease;
+          user-select: none;
+          box-shadow: 0 4px 14px rgb(79 70 229 / 0.4);
+        }
+        button.submit-btn:hover,
+        button.submit-btn:focus {
+          background: linear-gradient(90deg,rgb(138, 132, 205) 0%,rgb(144, 178, 232) 100%);
+          box-shadow: 0 6px 18px rgb(59 130 246 / 0.6);
+          outline: none;
+        }
+        .career-report {
+          background: #fff;
+          border-radius: 0.75rem;
+          padding: 2rem 3rem;
+          box-shadow: 0 10px 30px rgb(0 0 0 / 0.06);
+          max-width: 780px;
+          width: 100%;
+          color: #374151;
+          text-align: left;
+          user-select: text;
+          font-weight: 500;
+        }
+        .career-report h2 {
+          font-weight: 700;
+          font-size: 2rem;
+          margin-bottom: 1.25rem;
+          color: #334155;
+          user-select: text;
+          border-bottom: 2px solid #e0e7ff;
+          padding-bottom: 0.5rem;
+        }
+        .career-report section {
+          margin-bottom: 1.25rem;
+          user-select: text;
+        }
+        .career-report h3 {
+          font-weight: 600;
+          font-size: 1.125rem;
+          color: #1e40af;
+          margin-bottom: 0.375rem;
+          user-select: text;
+        }
+        .career-report p,
+        .career-report ul,
+        .career-report li {
+          font-size: 1rem;
+          line-height: 1.6;
+          user-select: text;
+          color: #475569;
+        }
+        .career-report ul {
+          padding-left: 1.25rem;
+          margin: 0.25rem 0;
+          list-style-type: disc;
+        }
+        .inspirational-quote {
+          font-style: italic;
+          margin-top: 2rem;
+          color: #64748b;
+          text-align: center;
+          user-select: text;
+        }
+        @media (min-width: 640px) {
+          label {
+            margin-top: 0.85rem;
+            margin-bottom: 0.5rem;
+          }
+          textarea {
+            min-height: 80px;
+          }
+        }
+      `}</style>
+
+      <header>
+        <img
+          src="/logo.jpg"
+          alt="Company Logo"
+          aria-hidden="true"
+          draggable="false"
         />
-        <button
-          type="submit"
-          style={hoverSubmit ? { ...styles.button, ...styles.buttonHover } : styles.button}
-          onMouseEnter={() => setHoverSubmit(true)}
-          onMouseLeave={() => setHoverSubmit(false)}
-          aria-label="Submit Career Guidance Registration Form"
-        >
-          Submit
-        </button>
-      </form>
+        <h1>Career Campus</h1>
+      </header>
+      <main className="page-container" role="main">
+        <section className="form-description" aria-label="About this career guidance form">
+          <h2>Career Guidance Form</h2>
+          <p>
+            Fill out this form to get personalized career recommendations based on your academic background,
+            interests, and goals. Discover career options, education paths, and more!
+          </p>
+        </section>
+        <form onSubmit={handleSubmit} noValidate>
+          {/* Personal Info */}
+          <section>
+            <h2 className="section-title">1. Personal Information</h2>
+            <label htmlFor="fullName">
+              Full Name <sup aria-label="required">*</sup>
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+              autoComplete="name"
+              aria-required="true"
+              placeholder="Your full name"
+              spellCheck="false"
+            />
+            <label htmlFor="ageOrDob" style={{ marginTop: '0.75rem' }}>
+              Age or Date of Birth
+            </label>
+            <input
+              type="date"
+              id="ageOrDob"
+              name="ageOrDob"
+              value={formData.ageOrDob}
+              onChange={handleChange}
+              aria-describedby="ageDobHelp"
+              placeholder="YYYY-MM-DD"
+            />
+          </section>
 
-      {submitted && recommendations && (
-        <section
-          style={styles.recommendationsSection}
-          aria-live="polite"
-          aria-labelledby="recommendations-heading"
-        >
-          <h2 id="recommendations-heading" style={styles.recHeading}>
-            Career Guidance Recommendations
-          </h2>
+          {/* Academic Background */}
+          <section>
+            <h2 className="section-title">2. Academic Background</h2>
+            <label htmlFor="educationLevel">
+              Current Education Level <sup aria-label="required">*</sup>
+            </label>
+            <select
+              id="educationLevel"
+              name="educationLevel"
+              value={formData.educationLevel}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  educationLevel: e.target.value,
+                  stream:
+                    e.target.value === 'Class 11' || e.target.value === 'Class 12'
+                      ? prev.stream
+                      : '',
+                }));
+              }}
+              required
+              aria-required="true"
+            >
+              <option value="">Select...</option>
+              {educationLevels.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
+            </select>
 
-          <div style={styles.recItem}>
-            <h3 style={styles.recTitle}>Recommended Careers</h3>
-            <p style={styles.recText}>{recommendations.careerPaths}</p>
-          </div>
-          <div style={styles.recItem}>
-            <h3 style={styles.recTitle}>Benefits</h3>
-            <p style={styles.recText}>{recommendations.benefits}</p>
-          </div>
-          <div style={styles.recItem}>
-            <h3 style={styles.recTitle}>Expected Salary</h3>
-            <p style={styles.recText}>{recommendations.salary}</p>
-          </div>
-          <div style={styles.recItem}>
-            <h3 style={styles.recTitle}>Future Education</h3>
-            <p style={styles.recText}>{recommendations.education}</p>
-          </div>
-          {recommendations.additionalNotes.length > 0 && (
-            <div style={styles.recItem}>
-              <h3 style={styles.recTitle}>Additional Notes</h3>
-              <ul style={styles.recList}>
-                {recommendations.additionalNotes.map((note, idx) => (
-                  <li key={idx}>{note}</li>
+            {(formData.educationLevel === 'Class 11' ||
+              formData.educationLevel === 'Class 12') && (
+              <>
+                <label htmlFor="stream" style={{ marginTop: '0.75rem' }}>
+                  Stream/Subjects <sup aria-label="required">*</sup>
+                </label>
+                <select
+                  id="stream"
+                  name="stream"
+                  value={formData.stream}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select...</option>
+                  {streams.map((stream) => (
+                    <option key={stream} value={stream}>
+                      {stream}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
+
+            <label htmlFor="academicScore" style={{ marginTop: '0.75rem' }}>
+              Recent Academic Score (%)
+            </label>
+            <input
+              type="number"
+              id="academicScore"
+              name="academicScore"
+              value={formData.academicScore}
+              onChange={handleChange}
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="e.g. 85.5"
+              aria-describedby="academicScoreHelp"
+            />
+          </section>
+
+          {/* Interests & Strengths */}
+          <section>
+            <h2 className="section-title">3. Interests &amp; Strengths</h2>
+            <label htmlFor="favoriteSubjects">
+              Favorite Subjects (Ctrl/Cmd + Click to select multiple)
+            </label>
+            <select
+              multiple
+              id="favoriteSubjects"
+              name="favoriteSubjects"
+              value={formData.favoriteSubjects}
+              onChange={handleChange}
+              size={6}
+              aria-multiselectable="true"
+              style={{ cursor: 'pointer', userSelect: 'none' }}
+            >
+              {favoriteSubjectsOptions.map((subject) => (
+                <option key={subject} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
+
+            <label htmlFor="hobbies" style={{ marginTop: '0.75rem' }}>
+              Top 3 Hobbies or Interests
+            </label>
+            <textarea
+              id="hobbies"
+              name="hobbies"
+              value={formData.hobbies}
+              onChange={handleChange}
+              rows="3"
+              placeholder="List your hobbies or interests, separated by commas"
+              spellCheck="true"
+            />
+
+            <label htmlFor="skills" style={{ marginTop: '0.75rem' }}>
+              Technical or Creative Skills (Optional)
+            </label>
+            <textarea
+              id="skills"
+              name="skills"
+              value={formData.skills}
+              onChange={handleChange}
+              rows="3"
+              placeholder="e.g., Coding, Drawing, Writing"
+              spellCheck="true"
+            />
+          </section>
+
+          {/* Career Goals */}
+          <section>
+            <h2 className="section-title">4. Career Goals</h2>
+            <label htmlFor="dreamCareer">Dream Career (if known)</label>
+            <select
+              id="dreamCareer"
+              name="dreamCareer"
+              value={formData.dreamCareer}
+              onChange={handleChange}
+              aria-describedby="dreamCareerHelp"
+            >
+              <option value="">Select...</option>
+              {dreamCareersOptions.map((career) => (
+                <option key={career} value={career}>
+                  {career}
+                </option>
+              ))}
+            </select>
+
+            <fieldset
+              className="radio-group"
+              aria-label="Are you open to career suggestions?"
+              style={{ marginTop: '0.75rem' }}
+            >
+              <legend style={{ fontWeight: 600, marginBottom: '0.25rem', color: '#374151' }}>
+                Are you open to career suggestions?
+              </legend>
+              <label>
+                <input
+                  type="radio"
+                  name="openToSuggestions"
+                  value="true"
+                  checked={formData.openToSuggestions === 'true'}
+                  onChange={handleChange}
+                />
+                Yes
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="openToSuggestions"
+                  value="false"
+                  checked={formData.openToSuggestions === 'false'}
+                  onChange={handleChange}
+                />
+                No
+              </label>
+            </fieldset>
+          </section>
+
+          <button type="submit" className="submit-btn" aria-label="Generate Career Report">
+            Generate Career Report
+          </button>
+        </form>
+
+        {careerReport && (
+          <article
+            className="career-report"
+            role="region"
+            aria-live="polite"
+            tabIndex={-1}
+            ref={reportRef}
+          >
+            <h2>Career Options</h2>
+            <section>
+              <h3>Primary Recommended Careers</h3>
+              <p>{careerReport.careerOptions.primary.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Alternative Career Paths</h3>
+              <p>{careerReport.careerOptions.alternative.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Why This Career?</h3>
+              <p>{careerReport.careerOptions.why}</p>
+            </section>
+
+            <h2>📚 Future Education Path</h2>
+            <section>
+              <h3>Relevant Courses or Degrees</h3>
+              <p>{careerReport.educationPath.courses.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Required Entrance Exams</h3>
+              <p>{careerReport.educationPath.exams.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Top Institutes or Colleges</h3>
+              <p>{careerReport.educationPath.institutes.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Recommended Certifications</h3>
+              <p>{careerReport.educationPath.certifications.join(', ')}</p>
+            </section>
+
+            <h2>💼 Career Description</h2>
+            <section>
+              <h3>Overview of Job Role</h3>
+              <p>{careerReport.careerDescription.overview}</p>
+            </section>
+            <section>
+              <h3>Key Responsibilities</h3>
+              <ul>
+                {careerReport.careerDescription.responsibilities.map((item, idx) => (
+                  <li key={idx}>{item}</li>
                 ))}
               </ul>
-            </div>
-          )}
-        </section>
-      )}
-    </main>
-  );
-};
+            </section>
+            <section>
+              <h3>Work Environment</h3>
+              <p>{careerReport.careerDescription.environment}</p>
+            </section>
 
-const App = () => {
-  return (
-    <>
-      <Header />
-      <CareerGuidanceForm />
+            <h2>💰 Salary Insights</h2>
+            <section>
+              <h3>Entry-Level Salary (India)</h3>
+              <p>{careerReport.salaryInsights.entryLevelIndia}</p>
+            </section>
+            <section>
+              <h3>Entry-Level Salary (Global)</h3>
+              <p>{careerReport.salaryInsights.entryLevelGlobal}</p>
+            </section>
+            <section>
+              <h3>Average Mid-Level Salary</h3>
+              <p>{careerReport.salaryInsights.midLevel}</p>
+            </section>
+            <section>
+              <h3>Potential High-End Salary</h3>
+              <p>{careerReport.salaryInsights.highEnd}</p>
+            </section>
+
+            <h2>🧠 Required Skills</h2>
+            <section>
+              <h3>Hard Skills</h3>
+              <p>{careerReport.requiredSkills.hardSkills.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Soft Skills</h3>
+              <p>{careerReport.requiredSkills.softSkills.join(', ')}</p>
+            </section>
+            <section>
+              <h3>How to Develop Them</h3>
+              <p>{careerReport.requiredSkills.development}</p>
+            </section>
+
+            <h2>🌟 Benefits of This Career</h2>
+            <section>
+              <h3>Job Security</h3>
+              <p>{careerReport.benefits.jobSecurity}</p>
+            </section>
+            <section>
+              <h3>Growth Opportunities</h3>
+              <p>{careerReport.benefits.growth}</p>
+            </section>
+            <section>
+              <h3>Work-Life Balance</h3>
+              <p>{careerReport.benefits.workLifeBalance}</p>
+            </section>
+            <section>
+              <h3>Impact on Society</h3>
+              <p>{careerReport.benefits.impact}</p>
+            </section>
+
+            <h2>📈 Future Scope</h2>
+            <section>
+              <h3>Industry Demand Trend</h3>
+              <p>{careerReport.futureScope.demand}</p>
+            </section>
+            <section>
+              <h3>Emerging Technologies</h3>
+              <p>{careerReport.futureScope.technologies.join(', ')}</p>
+            </section>
+            <section>
+              <h3>Global Opportunities</h3>
+              <p>{careerReport.futureScope.opportunities}</p>
+            </section>
+
+            <h2>🔄 Backup Options (Plan B)</h2>
+            <section>
+              <p>{careerReport.backupOptions}</p>
+            </section>
+
+            <h2>📌 Next Steps / Action Plan</h2>
+            <section>
+              <h3>Short-Term Goals</h3>
+              <ul>
+                {careerReport.actionPlan.shortTerm.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <h3>Mid-Term Goals</h3>
+              <ul>
+                {careerReport.actionPlan.midTerm.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <h3>Long-Term Goals</h3>
+              <ul>
+                {careerReport.actionPlan.longTerm.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="inspirational-quote" aria-label="Inspirational Quote">
+              {careerReport.inspirationalQuote}
+            </section>
+          </article>
+        )}
+      </main>
     </>
   );
 };
 
-export default App;
-
+export default CareerForm;
