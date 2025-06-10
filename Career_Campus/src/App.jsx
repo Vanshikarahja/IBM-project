@@ -8,10 +8,9 @@ import SignIn from './pages/SignIn'
 import Form from './pages/Form'
 import Game from './pages/Game'
 import Chat from './pages/Chat'
-// import {askGenAi} from './utils/genai'
+
 import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
+
 
 import './App.css'
 import './index.css'
@@ -28,15 +27,12 @@ function App() {
         <Route path="/Form" element={<Form />} />
         <Route path="/Game" element={<Game />} />
         <Route path="/Chat" element={<Chat />} />
-        {/* <Route path="/" element={<Home />} /> */}
+       
         
       </Routes>   
       </BrowserRouter>
 
 
-    // <div>a
-    //   <h1 className="text-4xl font-bold text-blue-500">hello guys</h1>
-    // </div>
     
   )
 }

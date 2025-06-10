@@ -9,7 +9,11 @@ const Footer = () => {
         e.preventDefault();
         emailjs.sendForm(
             'service_jpzbdlz',      // replace with your EmailJS service ID
+<<<<<<< HEAD
             'template_m4hj1gn',     // replace with your EmailJS template ID
+=======
+            'template_gzsv1mi',     // replace with your EmailJS template ID
+>>>>>>> 530d4b4 (feat: Update project with new components and features including About, Navbar, and enhanced Slider with video support; integrate EmailJS for contact form in Footer; add new assets and update package dependencies.)
             form.current,
             '-p0Cg4LugnjRqWZc6'       // replace with your EmailJS public key
         ).then(() => {
