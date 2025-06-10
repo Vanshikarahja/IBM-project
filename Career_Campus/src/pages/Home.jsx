@@ -6,8 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Bloom,ToneMapping,EffectComposer } from '@react-three/postprocessing';
 import Cyl from "../components/Cyl.jsx";
 import ScrollingText from '../components/ScrollingText.jsx';
-//import Slider from "../components/Slider.jsx";
-// import Navbar from '../components/Navbar.jsx';
+import Slider from "../components/Slider.jsx";
+import Footer from '../components/Footer.jsx';
+import About from '../components/About.jsx';
+ import Navbar from '../components/Navbar.jsx';
 const Home = () => {
   // 10-28 line added
  gsap.registerPlugin(ScrollTrigger);
@@ -31,7 +33,7 @@ const Home = () => {
     }
   }, []);
     return(<>
-    {/* <Navbar/> */}
+    <Navbar/>
        <Canvas flat camera={{fov:22}}>
         {/* <OrbitControls />  */}
        <ambientLight />
@@ -51,11 +53,14 @@ const Home = () => {
       </Canvas>
 
       {/* scrolling text */}
-     <ScrollingText />
+ <ScrollingText />
+      
+    
 
      {/* now there will be cards */}
-     {/* <Slider/> */}
-     
+     <Slider />
+     <About/>
+     <Footer/>
 
      
       </>

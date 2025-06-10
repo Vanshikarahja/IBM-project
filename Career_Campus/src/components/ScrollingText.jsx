@@ -35,7 +35,7 @@ const ScrollingText = () => {
   }, []);
 
   return (
-    <div className="overflow-hidden w-full bg-black py-6">
+    <div className="overflow-hidden w-full bg-black py-2 ">
       <div
         ref={containerRef}
         className="flex whitespace-nowrap"
@@ -43,11 +43,11 @@ const ScrollingText = () => {
       >
         <span
           ref={textRef}
-          className="text-3xl md:text-5xl font-bold text-white px-8 font-montserrat"
+          className="text-2xl md:text-3xl font-semi-bold text-white px-8 font-montserrat"
         >
           {marqueeText}
         </span>
-        <span className="text-3xl md:text-5xl font-bold text-white px-8 font-montserra">
+        <span className="text-2xl md:text-3xl font-semi-bold text-white px-8 font-montserrat">
           {marqueeText}
         </span>
       </div>
