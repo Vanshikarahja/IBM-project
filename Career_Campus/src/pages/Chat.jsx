@@ -1,185 +1,204 @@
-import React, { useState } from "react";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
 
-// Dummy AI logic for demonstration
-const aiQuestions = [
-    "Hi! What is your favorite subject?",
-    "What do you enjoy doing in your free time?",
-    "Do you prefer working with people or with technology?",
-    "Are you interested in further studies or starting a job soon?",
-];
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const careerSuggestions = [
-    {
-        keywords: ["math", "science", "technology"],
-        path: "Engineering or Data Science",
-        analysis: "You seem to enjoy analytical and technical subjects.",
-    },
-    {
-        keywords: ["art", "design", "creative"],
-        path: "Graphic Design or Fine Arts",
-        analysis: "Your creative interests could lead to a career in arts.",
-    },
-    {
-        keywords: ["people", "help", "teach"],
-        path: "Teaching or Social Work",
-        analysis: "You enjoy working with people and helping others.",
-    },
-    {
-        keywords: ["business", "management", "lead"],
-        path: "Business Management or Entrepreneurship",
-        analysis: "You have an inclination towards leadership and business.",
-    },
-];
+function App() {
+  const [question, setQuestion] = useState("");
+  const [typingAnswer, setTypingAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [theme, setTheme] = useState("dark");
+  const [suggestedQuestions, setSuggestedQuestions] = useState([]);
 
-function analyzeResponses(responses) {
-    const allAnswers = responses.join(" ").toLowerCase();
-    for (let suggestion of careerSuggestions) {
-        if (suggestion.keywords.some((kw) => allAnswers.includes(kw))) {
-            return suggestion;
-        }
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("chatbot-theme");
+    if (savedTheme) setTheme(savedTheme);
+  }, []);
+
+  useEffect(() => {
+    document.body.className = theme;
+    localStorage.setItem("chatbot-theme", theme);
+  }, [theme]);
+
+  function formatAnswerToHTML(text) {
+    // Add emojis, bold, italic, underline, and color spans
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+      .replace(/\*(.*?)\*/g, "<i>$1</i>")
+      .replace(/__(.*?)__/g, "<u>$1</u>")
+      .replace(/\[red\](.*?)\[\/red\]/g, "<span class='red'>$1</span>")
+      .replace(/\[blue\](.*?)\[\/blue\]/g, "<span class='blue'>$1</span>")
+      .replace(/\[green\](.*?)\[\/green\]/g, "<span class='green'>$1</span>");
+  }
+
+  async function generateAnswer(customQuestion = null) {
+    const q = (customQuestion || question).trim();
+    if (!q) {
+      alert("Please enter a question.");
+      return;
     }
-    return {
-        path: "General Studies",
-        analysis: "Based on your responses, a general career path is suggested.",
-    };
+
+    setLoading(true);
+    setTypingAnswer("");
+
+    const shouldBeBrief =
+      q.length < 30 &&
+      !q.toLowerCase().includes("essay") &&
+      !q.toLowerCase().includes("explain") &&
+      !q.toLowerCase().includes("describe");
+
+    const finalPrompt = shouldBeBrief
+      ? `Answer this briefly and to the point: ${q}`
+      : q;
+
+    try {
+      const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCjG7aHcZSvFhWyLbqKE6_a09orDc8YRIA`,
+        {
+          contents: [{ parts: [{ text: finalPrompt }] }],
+        }
+      );
+
+      let result = response.data.candidates[0].content.parts[0].text;
+
+      if (shouldBeBrief && result.length > 300) {
+        result = result.slice(0, 300) + "...";
+      }
+
+      const formattedHTML = formatAnswerToHTML(result);
+      setTypingAnswer(formattedHTML);
+
+      setHistory((prev) => [...prev, { question: q, answer: formattedHTML }]);
+      fetchSuggestedQuestions(result);
+    } catch (error) {
+      console.error("Error:", error);
+      setTypingAnswer("<i>Something went wrong while fetching the answer.</i>");
+    }
+
+    setLoading(false);
+  }
+
+  async function fetchSuggestedQuestions(answerText) {
+    try {
+      const followUpPrompt = `Suggest 3 short and simple follow-up questions only in 4-6 words each for this answer: "${answerText}". Give them as a plain list.`;
+
+      const res = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCjG7aHcZSvFhWyLbqKE6_a09orDc8YRIA`,
+        {
+          contents: [{ parts: [{ text: followUpPrompt }] }],
+        }
+      );
+
+      const suggestionText = res.data.candidates[0].content.parts[0].text;
+
+      const parsed = suggestionText
+        .split('\n')
+        .map(line => line.replace(/^\d+\.\s*/, '').trim())
+        .filter(Boolean);
+
+      setSuggestedQuestions(parsed);
+    } catch (err) {
+      console.error("Error getting suggestions:", err);
+    }
+  }
+
+  function handleVoiceInput() {
+    try {
+      const recognition = new window.SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (event) => {
+        const speech = event.results[0][0].transcript;
+        setQuestion(speech);
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        alert("Voice input error: " + event.error);
+      };
+
+      recognition.start();
+    } catch (err) {
+      alert("Your browser does not support voice input.");
+    }
+  }
+
+  function handleSuggestedQuestionClick(q) {
+    setQuestion(q);
+    generateAnswer(q);
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      generateAnswer();
+    }
+  }
+
+  return (
+    <div className="app-container">
+      <h1>Chatbot-AI</h1>
+
+      <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="theme-toggle">
+        Switch to {theme === "dark" ? "Light" : "Dark"} Mode
+      </button>
+
+      {suggestedQuestions.length > 0 && (
+        <div className="suggested-container">
+          {suggestedQuestions.map((q, i) => (
+            <button key={i} className="suggested-btn" onClick={() => handleSuggestedQuestionClick(q)}>
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <input
+        type="text"
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Ask your question here..."
+        className="input-field"
+      />
+
+      <div className="button-group">
+        <button onClick={handleVoiceInput}>🎤 Speak</button>
+        <button onClick={() => generateAnswer()} disabled={loading}>
+          {loading ? "Loading..." : "Ask Gemini"}
+        </button>
+        <button onClick={() => {
+          setQuestion("");
+          setTypingAnswer("");
+          setHistory([]);
+          setSuggestedQuestions([]);
+        }}>
+          Clear
+        </button>
+      </div>
+
+      {typingAnswer && (
+        <p className="ai-answer" dangerouslySetInnerHTML={{ __html: "🤖 <b>AI Answer:</b><br/>" + typingAnswer }} />
+      )}
+
+      {history.length > 0 && (
+        <div className="history">
+          <h2>🧠 Previous Q&A</h2>
+          <ul>
+            {history.map((entry, index) => (
+              <li key={index}>
+                <strong>🔹 You:</strong> {entry.question}<br />
+                <strong>🤖 Gemini:</strong> <span dangerouslySetInnerHTML={{ __html: entry.answer }} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 }
 
-const Chat = () => {
-    const [messages, setMessages] = useState([
-        { from: "ai", text: aiQuestions[0] },
-    ]);
-    const [userInput, setUserInput] = useState("");
-    const [aiStep, setAiStep] = useState(0);
-    const [userResponses, setUserResponses] = useState([]);
-    const [showResult, setShowResult] = useState(false);
-    const [result, setResult] = useState(null);
-
-    const handleSend = () => {
-        if (!userInput.trim()) return;
-
-        // Add user message
-        setMessages((msgs) => [...msgs, { from: "user", text: userInput }]);
-        setUserResponses((res) => [...res, userInput]);
-
-        // AI responds with next question or analysis
-        setTimeout(() => {
-            if (aiStep < aiQuestions.length - 1) {
-                setMessages((msgs) => [
-                    ...msgs,
-                    { from: "ai", text: aiQuestions[aiStep + 1] },
-                ]);
-                setAiStep(aiStep + 1);
-            } else {
-                // Analysis and career suggestion
-                const analysis = analyzeResponses([...userResponses, userInput]);
-                setMessages((msgs) => [
-                    ...msgs,
-                    {
-                        from: "ai",
-                        text: `Thank you for your answers! Here's our analysis: ${analysis.analysis} Recommended career path: ${analysis.path}`,
-                    },
-                ]);
-                setResult(analysis);
-                setShowResult(true);
-            }
-        }, 800);
-
-        setUserInput("");
-    };
-
-    return (
-        <div style={{ maxWidth: 500, margin: "40px auto", fontFamily: "sans-serif" }}>
-            <h2>Career Campus AI Chat</h2>
-            <div
-                style={{
-                    border: "1px solid #ccc",
-                    borderRadius: 8,
-                    padding: 16,
-                    minHeight: 300,
-                    background: "#fafafa",
-                    marginBottom: 16,
-                    overflowY: "auto",
-                    height: 350,
-                }}
-            >
-                {messages.map((msg, idx) => (
-                    <div
-                        key={idx}
-                        style={{
-                            textAlign: msg.from === "user" ? "right" : "left",
-                            margin: "8px 0",
-                        }}
-                    >
-                        <span
-                            style={{
-                                display: "inline-block",
-                                padding: "8px 12px",
-                                borderRadius: 16,
-                                background: msg.from === "user" ? "#007bff" : "#e9ecef",
-                                color: msg.from === "user" ? "#fff" : "#333",
-                                maxWidth: "80%",
-                                wordBreak: "break-word",
-                            }}
-                        >
-                            {msg.text}
-                        </span>
-                    </div>
-                ))}
-            </div>
-            {!showResult && (
-                <div style={{ display: "flex" }}>
-                    <input
-                        type="text"
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                        placeholder="Type your answer..."
-                        style={{
-                            flex: 1,
-                            padding: 10,
-                            borderRadius: 8,
-                            border: "1px solid #ccc",
-                            marginRight: 8,
-                        }}
-                        disabled={showResult}
-                    />
-                    <button
-                        onClick={handleSend}
-                        style={{
-                            padding: "10px 20px",
-                            borderRadius: 8,
-                            border: "none",
-                            background: "#007bff",
-                            color: "#fff",
-                            cursor: "pointer",
-                        }}
-                        disabled={showResult}
-                    >
-                        Send
-                    </button>
-                </div>
-            )}
-            {showResult && result && (
-                <div
-                    style={{
-                        marginTop: 24,
-                        padding: 16,
-                        background: "#e6ffe6",
-                        borderRadius: 8,
-                        border: "1px solid #b2ffb2",
-                    }}
-                >
-                    <h3>Career Path Recommendation</h3>
-                    <p>
-                        <strong>Analysis:</strong> {result.analysis}
-                    </p>
-                    <p>
-                        <strong>Suggested Path:</strong> {result.path}
-                    </p>
-                </div>
-            )}
-        </div>
-    );
-};
-
-export default Chat;
+export default App;
