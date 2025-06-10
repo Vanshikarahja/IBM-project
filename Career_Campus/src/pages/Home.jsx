@@ -1,16 +1,22 @@
-import { Canvas } from '@react-three/fiber';
+import { Canvas } from "@react-three/fiber";
 import React, { useRef, useEffect } from "react";
-import gsap from 'gsap';
-import "../style.css"
+import gsap from "gsap";
+import "../style.css";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Bloom,ToneMapping,EffectComposer } from '@react-three/postprocessing';
+import {
+  Bloom,
+  ToneMapping,
+  EffectComposer,
+} from "@react-three/postprocessing";
 import Cyl from "../components/Cyl.jsx";
-import ScrollingText from '../components/ScrollingText.jsx';
-//import Slider from "../components/Slider.jsx";
-// import Navbar from '../components/Navbar.jsx';
+import ScrollingText from "../components/ScrollingText.jsx";
+import Slider from "../components/Slider.jsx";
+import Footer from "../components/Footer.jsx";
+import About from "../components/About.jsx";
+import Navbar from "../components/Navbar.jsx";
 const Home = () => {
   // 10-28 line added
- gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
   const nextSectionRef = useRef(null);
   useEffect(() => {
     if (nextSectionRef.current) {
@@ -30,35 +36,31 @@ const Home = () => {
       );
     }
   }, []);
-    return(<>
-    {/* <Navbar/> */}
-       <Canvas flat camera={{fov:22}}>
+  return (
+    <>
+      <Navbar />
+      <Canvas flat camera={{ fov: 22 }}>
         {/* <OrbitControls />  */}
-       <ambientLight />
-       <Cyl/>
-       <EffectComposer>
-      <Bloom
-        mipmapBlur // Use mipmap blur for better performance.
-    intensity={8.0} // The bloom intensity.
-
-    luminanceThreshold={0} // luminance threshold. Raise this value to mask out darker elements in the scene.
-    luminanceSmoothing={0 } // smoothness of the luminance threshold. Range is [0, 1]
-  />
-  
-</EffectComposer>
-
-      
+        <ambientLight />
+        <Cyl />
+        <EffectComposer>
+          <Bloom
+            mipmapBlur // Use mipmap blur for better performance.
+            intensity={8.0} // The bloom intensity.
+            luminanceThreshold={0} // luminance threshold. Raise this value to mask out darker elements in the scene.
+            luminanceSmoothing={0} // smoothness of the luminance threshold. Range is [0, 1]
+          />
+        </EffectComposer>
       </Canvas>
 
       {/* scrolling text */}
-     <ScrollingText />
+      <ScrollingText />
 
-     {/* now there will be cards */}
-     {/* <Slider/> */}
-     
-
-     
-      </>
-    )
-}
+      {/* now there will be cards */}
+      <Slider />
+      <About />
+      <Footer />
+    </>
+  );
+};
 export default Home;
