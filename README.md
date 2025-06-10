@@ -32,46 +32,6 @@ Career Campus is a modern, interactive web platform designed to guide users in t
 
 ---
 
-## Folder Structure
-
-```
-src/
-  components/
-    Navbar.jsx
-    Footer.jsx
-    Slider.jsx
-    ScrollingText.jsx
-    Cyl.jsx
-    About.jsx
-    Slider.css
-  pages/
-    Home.jsx
-    Landing.jsx
-    Game.jsx
-    Chat.jsx
-    Form.jsx
-    SignUp.jsx
-    SignIn.jsx
-    chapters/
-      EngineerQuiz.jsx
-      DoctorQuiz.jsx
-      PilotQuiz.jsx
-      TeacherQuiz.jsx
-      NavyQuiz.jsx
-      LawyerQuiz.jsx
-  assets/
-    Chat.png
-    Game.png
-    Form.png
-    intro.mp4
-    landing-bg.mp4
-  style.css
-  App.jsx
-  index.js
-```
-
----
-
 ## Getting Started
 
 1. **Clone the repository:**
