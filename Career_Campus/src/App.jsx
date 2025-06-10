@@ -13,6 +13,18 @@ import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 
+
+import Splash from "./pages/splash";
+import UserForm from './pages/UserForm';
+import ExploreFuture from "./pages/ExploreFuture";
+import EngineerQuiz from "./chapters/EngineerQuiz";  
+import DoctorQuiz from "./chapters/DoctorQuiz";
+
+import PilotQuiz from "./chapters/PilotQuiz";
+import TeacherQuiz from "./chapters/TeacherQuiz";
+import NavyQuiz from "./chapters/NavyQuiz";
+import LawyerQuiz from "./chapters/LawyerQuiz";
+
 import './App.css'
 import './index.css'
 function App() {
@@ -28,6 +40,17 @@ function App() {
         <Route path="/Form" element={<Form />} />
         <Route path="/Game" element={<Game />} />
         <Route path="/Chat" element={<Chat />} />
+
+
+        <Route path="/" element={<Splash />} />
+        <Route path="/form" element={<UserForm />} />
+         <Route path="/explore-future" element={<ExploreFuture />} />
+          <Route path="/engineer-quiz" element={<EngineerQuiz />} />
+          <Route path="/doctor-quiz" element={<DoctorQuiz />} />
+          <Route path="/pilot-quiz" element={<PilotQuiz />} />
+          <Route path="/teacher-quiz" element={<TeacherQuiz />} />
+          <Route path="/navy-quiz" element={<NavyQuiz />} />
+          <Route path="/lawyer-quiz" element={<LawyerQuiz />} />
         
       </Routes>   
       </BrowserRouter>
