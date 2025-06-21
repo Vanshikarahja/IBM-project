@@ -2,16 +2,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
-
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
+import UserForm from './pages/UserForm';
+import ExploreFuture from './pages/ExploreFuture';
 import Form from './pages/Form'
 import Game from './pages/Game'
 import Chat from './pages/Chat'
+
+ 
 // import {askGenAi} from './utils/genai'
 import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
+import EngineerQuiz from './chapters/EngineerQuiz';
+import DoctorQuiz from './chapters/DoctorQuiz';
+import PilotQuiz from './chapters/PilotQuiz';
+import TeacherQuiz from './chapters/TeacherQuiz';
+import NavyQuiz from './chapters/NavyQuiz';
+import LawyerQuiz from './chapters/LawyerQuiz';
 
 
 
@@ -24,24 +33,25 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/Form" element={<Form />} />
+        <Route path="/Chat" element={<Chat />} />
         <Route path="/Game" element={<Game />} />
-        <Route path="/Chat" element={<Chat />} /> */}
-        
-<Route path="/" element={<Home />} />
-
+        <Route path="/UserForm" element={<UserForm />} />
+        <Route path="/explore-future" element={<ExploreFuture />} />
+        <Route path="/engineer-quiz" element={<EngineerQuiz />} />
+        <Route path="/doctor-quiz" element={<DoctorQuiz />} />
+        <Route path="/pilot-quiz" element={<PilotQuiz />} />
+        <Route path="/teacher-quiz" element={<TeacherQuiz />} />
+        <Route path="/navy-quiz" element={<NavyQuiz />} />
+        <Route path="/lawyer-quiz" element={<LawyerQuiz />} />
+  {/* <Route path="/onboarding" element={<Onboarding />} /> */}
         
       </Routes>   
       </BrowserRouter>
-
-
-    // <div>
-    //   <h1 className="text-4xl font-bold text-blue-500">hello guys</h1>
-    // </div>
     
   )
 }

@@ -12,10 +12,10 @@ import Cyl from "../components/Cyl.jsx";
 import ScrollingText from "../components/ScrollingText.jsx";
 import Slider from "../components/Slider.jsx";
 import Footer from "../components/Footer.jsx";
-//import About from "../components/About.jsx";
+import About from "../components/About.jsx";
 import Navbar from "../components/Navbar.jsx";
 const Home = () => {
-  // 10-28 line added
+  
   gsap.registerPlugin(ScrollTrigger);
   const nextSectionRef = useRef(null);
   useEffect(() => {
@@ -39,6 +39,35 @@ const Home = () => {
   return (
     <>
       <Navbar />
+            {/* tryig to add a background image or video */}
+       <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+   
+      <img
+        src="/assets/2.jpg"
+        alt="bg"
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
+      />
+      {/* Or use a video: */}
+      {/* <video
+        src="/assets/your-background.mp4"
+        autoPlay
+        loop
+        muted
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
+      /> */}
+        <div style={{ position: "relative", width: "100%", height: "100%", zIndex: 1 }}>
       <Canvas flat camera={{ fov: 22 }}>
         {/* <OrbitControls />  */}
         <ambientLight />
@@ -52,7 +81,8 @@ const Home = () => {
           />
         </EffectComposer>
       </Canvas>
-
+</div>
+    </div>
       {/* scrolling text */}
       <ScrollingText />
 

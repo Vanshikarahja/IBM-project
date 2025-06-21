@@ -3,6 +3,7 @@ import React from "react";
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import UserForm from "./UserForm";
+import Splash from "./splash";
 import ExploreFuture from "./ExploreFuture";
 import EngineerQuiz from "../chapters/EngineerQuiz";  
 import DoctorQuiz from "../chapters/DoctorQuiz";
@@ -13,9 +14,11 @@ import NavyQuiz from "../chapters/NavyQuiz";
 import LawyerQuiz from "../chapters/LawyerQuiz";
 export default function Game() {
     return(
-        <BrowserRouter>
+        // <BrowserRouter>
         <Routes>
-            <Route path="/" element={<UserForm />} />
+            <Route path="/" element={<Splash/>} />
+
+            <Route path="/UserForm" element={<UserForm />} />
             <Route path="/explore" element={<ExploreFuture />} />
             <Route path="/engineer" element={<EngineerQuiz />} />
             <Route path="/doctor" element={<DoctorQuiz />} />
@@ -25,7 +28,7 @@ export default function Game() {
             <Route path="/lawyer" element={<LawyerQuiz />} />
         </Routes>
 
-        </BrowserRouter>
+        // {/* </BrowserRouter> */}
     )
 };
 

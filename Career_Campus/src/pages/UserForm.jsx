@@ -27,7 +27,8 @@ const UserForm = () => {
     // Yahan aap form data ko send kar sakte ho ya save kar sakte ho
 
     // Ab navigate karte hain agle page par
-    navigate("/explore-future");
+  navigate("/explore-future");
+   
   };
 
   return (

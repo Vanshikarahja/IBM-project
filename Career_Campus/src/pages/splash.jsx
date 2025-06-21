@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+
 import './splash.css';
 
 const avatars = [
@@ -22,7 +23,7 @@ const Splash = () => {
   }, []);
 
   const handlePlay = () => {
-    navigate("/form");
+    navigate("/UserForm");
   };
 
   return (

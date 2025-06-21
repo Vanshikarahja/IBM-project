@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Slider.css"; // Import your CSS file for styling
+
 const slides = [
   {
     type: "video",
@@ -14,7 +15,7 @@ const slides = [
     heading: "Chat Bot",
     description:
       "Interact with our AI-powered chat to get instant answers and guidance for your career queries.",
-    image: "/assets/Chat.png", // Use string path
+    image: "/assets/Chat.jpg", // Use string path
     buttonText: "Go to Chat",
     route: "/chat",
   },
@@ -23,7 +24,7 @@ const slides = [
     heading: "Game",
     description:
       "Play engaging games designed to assess your skills and interests, helping you find the right career fit.",
-    image: "/assets/Game.png",
+    image: "/assets/Game.jpg",
     buttonText: "Go to Game",
     route: "/game",
   },
@@ -32,7 +33,7 @@ const slides = [
     heading: "Form",
     description:
       "Fill out our comprehensive form to receive detailed career suggestions based on your profile.",
-    image: "/assets/Form.png",
+    image: "/assets/Form.jpg",
     buttonText: "Go to Form",
     route: "/form",
   },
