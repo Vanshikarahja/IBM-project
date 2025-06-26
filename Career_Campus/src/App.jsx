@@ -2,8 +2,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
-import SignUp from './pages/SignUp'
-import SignIn from './pages/SignIn'
 import UserForm from './pages/UserForm';
 import ExploreFuture from './pages/ExploreFuture';
 import Form from './pages/Form'
@@ -27,6 +25,8 @@ import LawyerQuiz from './chapters/LawyerQuiz';
 
 import './App.css'
 import './index.css'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -35,8 +35,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/Home" element={<Home />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/SignIn" element={<SignIn />} />
+        <Route path="/Register" element={<RegisterPage />} />
+        <Route path="/Login" element={<LoginPage />} />
         <Route path="/Form" element={<Form />} />
         <Route path="/Chat" element={<Chat />} />
         <Route path="/Game" element={<Game />} />
