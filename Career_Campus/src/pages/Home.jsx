@@ -40,7 +40,7 @@ const Home = () => {
     <>
       <Navbar />
             {/* tryig to add a background image or video */}
-       <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+       <div style={{ position: "relative", width: "100%", height: "90vh" }}>
    
       <img
         src="/assets/2.jpg"

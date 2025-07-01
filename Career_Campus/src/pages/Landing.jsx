@@ -9,7 +9,7 @@ import { SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/clerk-reac
 const Landing = () => {
   return (
     <div className="landing-page">
-      {/* <div className="video-background">
+      <div className="video-background">
         <video
           autoPlay
           loop
@@ -19,7 +19,7 @@ const Landing = () => {
           src="/assets/intro.mp4"
         />
         <div className="video-overlay" />
-      </div> */}
+      </div>
       <Navbar />
       <section className="hero-section">
         <div className="hero-content">
