@@ -3,7 +3,7 @@
 Career Campus is a modern, interactive web platform designed to guide users in their career journey. It features a visually engaging landing page, interactive games, AI-powered chat, personalized career suggestions, and a contact form that sends messages directly to the team.
 
 ---
-##Preview
+## Preview
 ![Screenshot 2025-07-02 003011](https://github.com/user-attachments/assets/157f692a-7506-4c78-9191-7f4f3119553b)
 
 ![Screenshot 2025-07-02 003108](https://github.com/user-attachments/assets/810899a0-0cda-4866-ad8c-4ef3b90f892a)
